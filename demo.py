@@ -71,7 +71,10 @@ class MyReceiver(pytak.QueueWorker):
 
     async def handle_data(self, data):
         """Handle data from the receive queue."""
-        self._logger.info("Received:\n%s\n", data.decode())
+        try:
+            self._logger.info("Received:\n%s\n", data.decode())
+        except UnicodeDecodeError as e:
+            self._logger.warning("Could not decode received data:\n%s", e)
 
     async def run(self):
         """Read from the receive queue, put data onto handler."""
